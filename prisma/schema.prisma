@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,4 +5,82 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  password     String
+  profileImage String?
+  orders       Order[]
+  reviews      Rating[]
+  created      DateTime @default(now())
+  updated      DateTime @default(now())
+}
+
+model Owner {
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique
+  password   String
+  username   String       @unique
+  Restaurant Restaurant[]
+  created    DateTime     @default(now())
+  updated    DateTime     @default(now())
+}
+
+model Restaurant {
+  id          Int        @id @default(autoincrement())
+  name        String
+  address     String
+  cuisineType String?
+  ownerId     Int
+  menu        MenuItem[]
+  Ratings     Rating[]
+  Owner       Owner      @relation(fields: [ownerId], references: [id])
+  created     DateTime   @default(now())
+  updated     DateTime   @default(now())
+}
+
+model MenuItem {
+  id             Int        @id @default(autoincrement())
+  name           String
+  description    String
+  price          Float
+  restaurantName String
+  restaurantId   Int
+  dietaryInfo    String[]
+  Order          Order[]
+  restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
+  created        DateTime   @default(now())
+  updated        DateTime   @default(now())
+  rating         Rating[]
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  status          String // Order status (processing, completed, delivering, delivered)
+  orderDate       DateTime
+  deliveryAddress String
+  totalPrice      Float
+  menuItemId      Int
+  userId          Int
+  User            User     @relation(fields: [userId], references: [id])
+  MenuItem        MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model Rating {
+  id           Int        @id @default(autoincrement())
+  text         String
+  rating       Float
+  restaurantId Int
+  userId       Int
+  menuItemId   Int?
+  user         User       @relation(fields: [userId], references: [id])
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  MenuItem     MenuItem?  @relation(fields: [menuItemId], references: [id])
+  created      DateTime   @default(now())
+  updated      DateTime   @default(now())
 }
