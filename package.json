@@ -1,0 +1,14 @@
+{
+  "name": "food-delivery-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "studio": "npx prisma studio",
+    "db-push": "npx prisma db push"
+  },
+  "author": "abdiaziz",
+  "license": "ISC"
+}
