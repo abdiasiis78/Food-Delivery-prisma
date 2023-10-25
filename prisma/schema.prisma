@@ -50,7 +50,6 @@ model MenuItem {
   name           String
   description    String
   price          Float
-  restaurantName String
   restaurantId   Int
   dietaryInfo    String[]
   Order          Order[]
