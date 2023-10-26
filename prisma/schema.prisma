@@ -61,15 +61,22 @@ model MenuItem {
 
 model Order {
   id              Int      @id @default(autoincrement())
-  status          String // Order status (processing, completed, delivering, delivered)
   orderDate       DateTime
   deliveryAddress String
   totalPrice      Float
+  status          OrderStatus  // The status field is connected to the OrderStatus enum
   menuItemId      Int
   userId          Int
   User            User     @relation(fields: [userId], references: [id])
   MenuItem        MenuItem @relation(fields: [menuItemId], references: [id])
 }
+
+enum OrderStatus {
+  PROCESSING
+  DELIVERING
+  DELIVERED
+}
+
 
 model Rating {
   id           Int        @id @default(autoincrement())
