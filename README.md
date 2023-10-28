@@ -143,7 +143,7 @@ This documentation provides an overview of the owner-management endpoints. For m
 
 
 
-
+# User Management
 
 This section outlines the endpoints related to user management. These endpoints allow you to create, update, retrieve, and delete user accounts.
 
@@ -273,6 +273,115 @@ Retrieve a list of all users.
 ```
 
 This documentation provides an overview of the user management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
+
+
+
+
+# Restaurant Management
+
+This section outlines the endpoints related to restaurant management. These endpoints allow you to create, update, retrieve, and delete restaurant information.
+
+### Create a New Restaurant
+
+**Endpoint:** `POST /api/restaurant`
+
+**Authentication:** Requires a valid JWT token.
+
+Create a new restaurant.
+
+##### Request Body
+
+| Parameter     | Type   | Required | Description                             |
+| ------------ | ------ | -------- | --------------------------------------- |
+| `name`       | string | Yes      | Name of the restaurant                   |
+| `address`    | string | Yes      | Address of the restaurant                |
+| `cuisineType`| string | Yes      | Cuisine type of the restaurant           |
+| `ownerId`    | number | Yes      | ID of the restaurant owner               |
+
+##### Response
+
+```json
+{
+  "message": "Restaurant created successfully",
+  "restaurant": New Restaurant data
+}
+```
+
+### Update Restaurant Information
+
+**Endpoint:** `PUT /api/restaurant/:id`
+
+**Authentication:** Requires a valid JWT token.
+
+Update the information of an existing restaurant.
+
+##### Request Body
+
+| Parameter     | Type   | Required | Description                            |
+| ------------ | ------ | -------- | --------------------------------------- |
+| `name`       | string | Yes      | New name of the restaurant (optional)   |
+| `address`    | string | Yes      | New address (optional)                  |
+| `cuisineType`| string | Yes      | New cuisine type (optional)             |
+| `ownerId`    | number | Yes      | New owner ID (optional)                |
+
+##### Response
+
+```json
+{
+  "message": "Restaurant information updated successfully",
+  "restaurant": Updated Restaurant data
+}
+```
+
+### List Restaurants
+
+**Endpoint:** `GET /api/restaurant`
+
+Retrieve a list of all restaurants.
+
+**Authentication:** No authentication required.
+
+##### Response
+
+```json
+{
+  "message": "Restaurants information retrieved successfully",
+  "restaurants": [List of Restaurant data]
+}
+```
+
+### Retrieve Restaurant Information
+
+**Endpoint:** `GET /api/restaurant/:id`
+
+Retrieve information about a specific restaurant.
+
+**Authentication:** No authentication required.
+
+##### Response
+
+```json
+{
+  "message": "Restaurant information retrieved successfully",
+  "restaurant": Restaurant data
+}
+```
+
+### Delete Restaurant
+
+**Endpoint:** `DELETE /api/restaurant/:id`
+
+Delete a restaurant.
+
+**Authentication:** Requires a valid JWT token.
+
+##### Response
+
+- `200 OK`: Restaurant deleted successfully
+- `404 Not Found`: Restaurant was not found
+
+This documentation provides an overview of the restaurant management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
+
 
 
 
