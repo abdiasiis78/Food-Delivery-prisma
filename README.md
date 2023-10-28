@@ -137,4 +137,144 @@ Retrieve a list of all owners.
   "owners": [List of Owner data]
 }
 ```
+This documentation provides an overview of the owner-management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation
+
+
+
+
+
+
+
+This section outlines the endpoints related to user management. These endpoints allow you to create, update, retrieve, and delete user accounts.
+
+### Registration
+
+#### Register a New User
+
+**Endpoint:** `POST /api/user/signup`
+
+Create a new user account.
+
+##### Request Body
+
+| Parameter       | Type   | Required | Description                             |
+| --------------- | ------ | -------- | --------------------------------------- |
+| `name`          | string | Yes      | Name of the user                         |
+| `username`      | string | Yes      | Username of the user                     |
+| `email`         | string | Yes      | Email address of the user               |
+| `password`      | string | Yes      | Password for the user's account         |
+| `profileImage`  | string | No       | URL to the user's profile image (optional) |
+
+##### Response
+
+```json
+{
+  "message": "User created successfully",
+  "user": New User data
+}
+```
+
+### Authentication
+
+#### User Login
+
+Authenticate a user and obtain a JWT token.
+
+**Endpoint:** `POST /api/user/login`
+
+##### Request Body
+
+| Parameter  | Type   | Required | Description                             |
+| ---------- | ------ | -------- | --------------------------------------- |
+| `email`    | string | Yes      | Email of the user                       |
+| `password` | string | Yes      | Password for the user's account         |
+
+##### Response
+
+```json
+{
+  "message": "User logged in successfully",
+  "token": "<jwt_token>"
+}
+```
+
+### Update User Information
+
+**Endpoint:** `PUT /api/user/:id`
+
+**Authentication:** Requires a valid JWT token.
+
+Update the information of an existing user.
+
+##### Request Body
+
+| Parameter      | Type   | Required | Description                               |
+| -------------  | ------ | -------- | ----------------------------------------- |
+| `name`         | string | No       | New name of the user (optional)           |
+| `username`     | string | No       | New username (optional)                   |
+| `email`        | string | No       | New email address (optional)              |
+| `password`     | string | No       | New password (optional)                  |
+| `profileImage` | string | No       | New URL to the user's profile image (optional) |
+
+##### Response
+
+```json
+{
+  "message": "User information updated successfully",
+  "user": Updated User data
+}
+```
+
+### Delete User
+
+**Endpoint:** `DELETE /api/user/:id`
+
+Delete a user's account.
+
+**Authentication:** Requires a valid JWT token.
+
+##### Response
+
+- `200 OK`: User deleted successfully
+- `404 Not Found`: User was not found
+
+### Retrieve User Information
+
+**Endpoint:** `GET /api/user/:id`
+
+Retrieve information about a specific user.
+
+**Authentication:** No authentication required.
+
+##### Response
+
+```json
+{
+  "message": "User information retrieved successfully",
+  "user": User data
+}
+```
+
+### List Users
+
+**Endpoint:** `GET /api/user`
+
+Retrieve a list of all users.
+
+**Authentication:** No authentication required.
+
+##### Response
+
+```json
+{
+  "message": "Users list retrieved successfully",
+  "users": [List of User data]
+}
+```
+
+This documentation provides an overview of the user management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
+
+
+
+
 
