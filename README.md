@@ -1,7 +1,8 @@
 
-# Food Ordering and Delivery Service App Backend
+# Food Ordering and Delivery Service App
 
-Welcome to the backend API documentation for the Food Ordering and Delivery Service app. This documentation provides information on how to interact with our API to create, manage, and retrieve data related to food orders, menus, user accounts, and user feedback.
+Our backend API powers a seamless food ordering and delivery platform. It enables user registration, restaurant and menu management, ratings, and order processing, all secured with JWT authentication. Scalable and user-friendly, it streamlines the food delivery experience.
+
 
 ## Base URL
 
