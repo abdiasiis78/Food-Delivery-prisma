@@ -124,7 +124,7 @@ router.put('/:id', authenticate, async (req, res) => {
   });
 
 
-  router.delete('/:id', async (req, res) => {
+  router.delete('/:id', authenticate, async (req, res) => {
     const ownerId =  parseInt(req.params.id);
   
     try {
