@@ -385,5 +385,323 @@ This documentation provides an overview of the restaurant management endpoints. 
 
 
 
+# Menu Item Management
 
+This section outlines the endpoints related to menu item management. These endpoints allow you to create, update, retrieve, and delete menu item information.
+
+### Create a New Menu Item
+
+**Endpoint:** `POST /api/menuitem`
+
+**Authentication:** Requires a valid JWT token.
+
+Create a new menu item.
+
+##### Request Body
+
+| Parameter       | Type   | Required | Description                             |
+| --------------- | ------ | -------- | --------------------------------------- |
+| `name`          | string | Yes      | Name of the menu item                   |
+| `description`   | string | Yes      | Description of the menu item            |
+| `price`         | number | Yes      | Price of the menu item                  |
+| `restaurantId`  | number | Yes      | ID of the restaurant associated with the menu item |
+| `dietaryInfo`   | string | No       | Dietary information for the menu item (optional) |
+
+##### Response
+
+```json
+{
+  "message": "Menu item created successfully",
+  "menuItem": New Menu Item data
+}
+```
+
+### Update Menu Item Information
+
+**Endpoint:** `PUT /api/menuitem/:id`
+
+**Authentication:** Requires a valid JWT token.
+
+Update the information of an existing menu item.
+
+##### Request Body
+
+| Parameter       | Type   | Required | Description                             |
+| --------------- | ------ | -------- | --------------------------------------- |
+| `name`          | string | Yes      | New name of the menu item (optional)   |
+| `description`   | string | Yes      | New description (optional)              |
+| `price`         | number | Yes      | New price (optional)                   |
+| `restaurantId`  | number | Yes      | New restaurant ID (optional)           |
+| `dietaryInfo`   | string | No       | New dietary information (optional)     |
+
+##### Response
+
+```json
+{
+  "message": "Menu item information updated successfully",
+  "menuItem": Updated Menu Item data
+}
+```
+
+### List Menu Items
+
+**Endpoint:** `GET /api/menuitem`
+
+Retrieve a list of all menu items.
+
+**Authentication:** No authentication required.
+
+##### Response
+
+```json
+{
+  "message": "Menu items information retrieved successfully",
+  "menuItems": [List of Menu Item data]
+}
+```
+
+### Retrieve Menu Item Information
+
+**Endpoint:** `GET /api/menuitem/:id`
+
+Retrieve information about a specific menu item.
+
+**Authentication:** No authentication required.
+
+##### Response
+
+```json
+{
+  "message": "Menu item information retrieved successfully",
+  "menuItem": Menu Item data
+}
+```
+
+### Delete Menu Item
+
+**Endpoint:** `DELETE /api/menuitem/:id`
+
+Delete a menu item.
+
+**Authentication:** Requires a valid JWT token.
+
+##### Response
+
+- `200 OK`: Menu item deleted successfully
+- `404 Not Found`: Menu item was not found
+
+This documentation provides an overview of the menu item management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
+
+
+
+
+# Order Management
+
+This section outlines the endpoints related to order management. These endpoints allow you to create, update, retrieve, and delete order information.
+
+### Create a New Order
+
+**Endpoint:** `POST /api/order`
+
+**Authentication:** Requires a valid JWT token.
+
+Create a new order.
+
+##### Request Body
+
+| Parameter        | Type      | Required | Description                             |
+| ---------------  | --------- | -------- | --------------------------------------- |
+| `orderDate`      | datetime  | Yes      | Date and time of the order              |
+| `deliveryAddress`| string    | Yes      | Delivery address for the order          |
+| `totalPrice`     | number    | Yes      | Total price of the order                |
+| `status`         | string    | No       | Order status (default: PROCESSING)      |
+| `menuItemId`     | number    | Yes      | ID of the menu item associated with the order |
+| `userId`         | number    | Yes      | ID of the user who placed the order     |
+
+##### Response
+
+```json
+{
+  "message": "We are preparing your delicious food.",
+  "order": New Order data
+}
+```
+
+### Update Order Status to DELIVERING
+
+**Endpoint:** `PUT /api/order/delivering/:id`
+
+**Authentication:** Requires a valid JWT token.
+
+Update the status of an order to "DELIVERING."
+
+##### Response
+
+```json
+{
+  "message": "Order is now being delivering.",
+  "order": Updated Order data
+}
+```
+
+### Update Order Status to DELIVERED
+
+**Endpoint:** `PUT /api/order/delivered/:id`
+
+**Authentication:** Requires a valid JWT token.
+
+Update the status of an order to "DELIVERED."
+
+##### Response
+
+```json
+{
+  "message": "Order has been successfully delivered.",
+  "order": Updated Order data
+}
+```
+
+### Retrieve Order Information
+
+**Endpoint:** `GET /api/order/:id`
+
+Retrieve information about a specific order.
+
+**Authentication:** Requires a valid JWT token.
+
+##### Response
+
+```json
+{
+  "message": "Order retrieved successfully",
+  "order": Order data
+}
+```
+
+### List Orders
+
+**Endpoint:** `GET /api/order`
+
+Retrieve a list of all orders.
+
+**Authentication:** Requires a valid JWT token.
+
+##### Response
+
+```json
+{
+  "message": "Orders retrieved successfully",
+  "orders": [List of Order data]
+}
+```
+
+### Delete Order
+
+**Endpoint:** `DELETE /api/order/:id`
+
+Delete an order.
+
+**Authentication:** Requires a valid JWT token.
+
+##### Response
+
+```json
+{
+  "message": "Order deleted successfully",
+  "order": Deleted Order data
+}
+```
+
+This documentation provides an overview of the order management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
+
+
+# Rating Management
+
+This section outlines the endpoints related to rating management. These endpoints allow you to create, update, retrieve, and delete ratings.
+
+### Create a New Rating
+
+**Endpoint:** `POST /api/rating`
+
+**Authentication:** Requires a valid JWT token.
+
+Create a new rating.
+
+##### Request Body
+
+| Parameter      | Type     | Required | Description                              |
+| -------------- | -------  | -------- | ---------------------------------------- |
+| `text`         | string   | Yes      | Feedback text or comment                |
+| `rating`       | number   | Yes      | Numeric rating value                     |
+| `restaurantId` | number   | Yes      | ID of the restaurant associated with the rating |
+| `userId`       | number   | Yes      | ID of the user who provided the rating   |
+| `menuItemId`   | number   | Yes      | ID of the menu item associated with the rating |
+
+##### Response
+
+```json
+{
+  "message": "Rating created successfully",
+  "rating": New Rating data
+}
+```
+
+### Update a Rating
+
+**Endpoint:** `PUT /api/rating/:id`
+
+**Authentication:** Requires a valid JWT token.
+
+Update an existing rating.
+
+##### Request Body
+
+| Parameter      | Type     | Required | Description                              |
+| -------------- | -------  | -------- | ---------------------------------------- |
+| `text`         | string   | Yes      | Updated feedback text or comment        |
+| `rating`       | number   | Yes      | Updated numeric rating value             |
+| `restaurantId` | number   | Yes      | Updated ID of the restaurant associated with the rating |
+| `userId`       | number   | Yes      | Updated ID of the user who provided the rating |
+| `menuItemId`   | number   | Yes      | Updated ID of the menu item associated with the rating |
+
+##### Response
+
+```json
+{
+  "message": "Rating updated successfully",
+  "rating": Updated Rating data
+}
+```
+
+### Retrieve Rating Information
+
+**Endpoint:** `GET /api/rating/:id`
+
+Retrieve information about a specific rating.
+
+##### Response
+
+```json
+{
+  "message": "Rating retrieved successfully",
+  "rating": Rating data
+}
+```
+
+### List Ratings
+
+**Endpoint:** `GET /api/rating`
+
+Retrieve a list of all ratings.
+
+##### Response
+
+```json
+{
+  "message": "Ratings retrieved successfully",
+  "ratings": [List of Rating data]
+}
+```
+
+This documentation provides an overview of the rating management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
 
