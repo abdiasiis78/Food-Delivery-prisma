@@ -6,7 +6,7 @@ const router = express.Router()
 
 
 
-router.post("/" , async (req, res) =>{
+router.post("/" , authenticate, async (req, res) =>{
 
     const {text, rating, restaurantId, userId, menuItemId} = req.body
 
@@ -37,7 +37,7 @@ router.post("/" , async (req, res) =>{
 })
 
 
-router.put("/:id" , async (req, res) =>{
+router.put("/:id", authenticate , async (req, res) =>{
      const ratingId = parseInt(req.params.id)
     const {text, rating, restaurantId, userId, menuItemId} = req.body
 
