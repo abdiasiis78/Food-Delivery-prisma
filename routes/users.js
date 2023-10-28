@@ -37,9 +37,6 @@ router.post("/signup", async (req, res) => {
             }
         })
 
-//  "email": "oroon@gmail.com",
-// "password": "12345678"
-
         return res.status(201).json({
             message: "user creation successfully",
             user: newuser 
@@ -164,6 +161,7 @@ router.put('/:id', authenticate, async (req, res) => {
       const user = await prisma.user.findUnique({
         where: { id: userId },
         select: {
+          id:true,
           username: true,
           name: true,
           email: true,
@@ -191,18 +189,9 @@ router.put('/:id', authenticate, async (req, res) => {
   
 
   router.get('/', async (req, res) => {
-    const { name, email, username, profileImage } = req.query; 
   
     try {
       const users = await prisma.user.findMany({
-        where: {
-          OR: [
-            { name: { contains: name || '' } },
-            { email: { contains: email || '' } },
-            { username: { contains: username || '' } },
-            { profileImage: { contains: profileImage || '' } },
-          ],
-        },
         select: {
             id: true,
             name: true,

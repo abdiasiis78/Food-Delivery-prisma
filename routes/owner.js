@@ -159,9 +159,10 @@ router.put('/:id', authenticate, async (req, res) => {
       const owner = await prisma.owner.findUnique({
         where: { id: ownerId },
         select: {
-          username: true,
+          id:true,
           name: true,
           email: true,
+          username: true,
         },
       });
   
@@ -185,16 +186,14 @@ router.put('/:id', authenticate, async (req, res) => {
   
 
   router.get('/', async (req, res) => {
-    const { name, email, username } = req.query; 
   
     try {
       const owners = await prisma.owner.findMany({
-        where: {
-          OR: [
-            { name: { contains: name || '' } },
-            { email: { contains: email || '' } },
-            { username: { contains: username || '' } },
-          ],
+        select: {
+          id:true,
+          name: true,
+          email: true,
+          username: true,
         },
       });
       
