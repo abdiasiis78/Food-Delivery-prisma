@@ -6,13 +6,15 @@ const server = express();
 server.use(json());
 import OwnerRoute from '../routes/owner.js'
 import UserRoute from '../routes/users.js'
-import restaurantRoute from '../routes/restaurants.js'
-import foodRouter from '../routes/food.js'
-import orderRoute from '../routes/orders.js'
+import RestaurantRoute from '../routes/restaurants.js'
+import FoodRouter from '../routes/food.js'
+import OrderRoute from '../routes/orders.js'
+import RatingRoute from "../routes/feedback.js"
 
 server.use("/api/owner", OwnerRoute)
 server.use("/api/user", UserRoute)
-server.use("/api/restaurant", restaurantRoute)
-server.use("/api/menuItem", foodRouter)
-server.use("/api/order", orderRoute)
+server.use("/api/restaurant", RestaurantRoute)
+server.use("/api/menuItem", FoodRouter)
+server.use("/api/order", OrderRoute)
+server.use("/api/rating", RatingRoute)
 export default server;

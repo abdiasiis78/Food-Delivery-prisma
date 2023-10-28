@@ -37,6 +37,9 @@ router.post("/signup", async (req, res) => {
             }
         })
 
+//  "email": "oroon@gmail.com",
+// "password": "12345678"
+
         return res.status(201).json({
             message: "user creation successfully",
             user: newuser 

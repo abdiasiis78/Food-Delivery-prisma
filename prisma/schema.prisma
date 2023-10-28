@@ -84,10 +84,10 @@ model Rating {
   rating       Float
   restaurantId Int
   userId       Int
-  menuItemId   Int?
+  menuItemId   Int
   user         User       @relation(fields: [userId], references: [id])
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  MenuItem     MenuItem?  @relation(fields: [menuItemId], references: [id])
+  MenuItem     MenuItem  @relation(fields: [menuItemId], references: [id])
   created      DateTime   @default(now())
   updated      DateTime   @default(now())
 }
