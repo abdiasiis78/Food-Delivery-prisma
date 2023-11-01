@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import prisma from "../api/lib/index.js"
 import Jwt from "jsonwebtoken";
 import "dotenv/config"
-import authenticate from '../api/middleware/middleware.js'
+import {userVerify} from '../api/middleware/middleware.js'
 const SECRET_KEY = process.env.SECRET_KEY
 
 const router = express.Router()
@@ -97,8 +97,8 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.put('/:id', authenticate, async (req, res) => {
-    const userId = parseInt(req.params.id);
+router.put('/update', userVerify, async (req, res) => {
+    const userId = req.user.id;
     const {name, username, email, password, profileImage } = req.body;
   
     try {
@@ -126,8 +126,8 @@ router.put('/:id', authenticate, async (req, res) => {
   });
 
 
-  router.delete('/:id', authenticate, async (req, res) => {
-    const userId =  parseInt(req.params.id);
+  router.delete('/delete', userVerify, async (req, res) => {
+    const userId =  req.user.id;
   
     try {
       const deleteuser = await prisma.user.delete({
@@ -154,8 +154,8 @@ router.put('/:id', authenticate, async (req, res) => {
   
   
   
-  router.get('/:id', async (req, res) => {
-    const userId = parseInt(req.params.id);
+  router.get('/curentUser', userVerify, async (req, res) => {
+    const userId = req.user.id;
 
     try {
       const user = await prisma.user.findUnique({

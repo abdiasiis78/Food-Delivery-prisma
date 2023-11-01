@@ -1,14 +1,15 @@
 import express from 'express'
 import prisma from '../api/lib/index.js'
-import authenticate from '../api/middleware/middleware.js'
+import {userVerify} from '../api/middleware/middleware.js'
 
 const router = express.Router()
 
 
 
-router.post("/" , authenticate, async (req, res) =>{
+router.post("/" , userVerify, async (req, res) =>{
 
-    const {text, rating, restaurantId, userId, menuItemId} = req.body
+    const {text, rating, restaurantId, menuItemId} = req.body
+    const userId = req.user.id;
 
     try{
         const newRating = await prisma.rating.create({
@@ -16,7 +17,7 @@ router.post("/" , authenticate, async (req, res) =>{
                 text: text,
                 rating: rating,
                 restaurantId: restaurantId,
-                userId: userId,
+                userId,
                 menuItemId: menuItemId,
             }
         })
@@ -37,9 +38,10 @@ router.post("/" , authenticate, async (req, res) =>{
 })
 
 
-router.put("/:id", authenticate , async (req, res) =>{
+router.put("/:id", userVerify , async (req, res) =>{
      const ratingId = parseInt(req.params.id)
-    const {text, rating, restaurantId, userId, menuItemId} = req.body
+    const {text, rating, restaurantId, menuItemId} = req.body
+    const userId = req.user.id;
 
     try{
         const updateRating = await prisma.rating.update({
@@ -49,7 +51,7 @@ router.put("/:id", authenticate , async (req, res) =>{
                 text: text,
                 rating: rating,
                 restaurantId: restaurantId,
-                userId: userId,
+                userId,
                 menuItemId: menuItemId,
             }
         })

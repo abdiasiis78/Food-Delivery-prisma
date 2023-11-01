@@ -1,19 +1,19 @@
 import express from "express";
 import prisma from "../api/lib/index.js";
 import "dotenv/config";
-import authenticate from "../api/middleware/middleware.js";
+import {authenticate} from "../api/middleware/middleware.js";
 const router = express();
 
 router.post("/", authenticate, async (req, res) => {
-  const { name, address, cuisineType, ownerId } = req.body;
-
+  const { name, address, cuisineType } = req.body;
+  const ownerId = req.owner.id;
   try {
     const newRestaurant = await prisma.restaurant.create({
       data: {
         name: name,
         address: address,
         cuisineType: cuisineType,
-        ownerId: ownerId,
+        ownerId,
       },
     });
     return res.status(201).json({
@@ -30,7 +30,8 @@ router.post("/", authenticate, async (req, res) => {
 
 router.put("/:id", authenticate, async (req, res) => {
   const restId = parseInt(req.params.id);
-  const { name, address, cuisineType, ownerId } = req.body;
+  const ownerId = req.owner.id;
+  const { name, address, cuisineType } = req.body;
   try {
     const updateRestaurant = await prisma.restaurant.update({
       where: { id: restId },

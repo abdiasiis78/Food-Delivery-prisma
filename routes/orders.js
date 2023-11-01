@@ -1,6 +1,7 @@
 import express from "express";
 import prisma from "../api/lib/index.js";
-import authenticate from "../api/middleware/middleware.js";
+import {authenticate} from "../api/middleware/middleware.js";
+import {userVerify} from "../api/middleware/middleware.js";
 import { OrderStatus } from "@prisma/client";
 
 // PROCESSING
@@ -11,9 +12,9 @@ import { OrderStatus } from "@prisma/client";
 
 const router = express.Router();
 
-router.post("/", authenticate, async (req, res) => {
-  const { orderDate, deliveryAddress, totalPrice, status, menuItemId, userId } =
-    req.body;
+router.post("/", userVerify, async (req, res) => {
+  const { orderDate, deliveryAddress, totalPrice, status, menuItemId } = req.body;
+  const userId = req.user.id;
 
   try {
     const newOrder = await prisma.order.create({
@@ -90,7 +91,7 @@ router.put('/deliverd/:id', authenticate, async (req, res) => {
 
 
 
-router.get('/:id', authenticate, async (req, res) => {
+router.get('/:id', async (req, res) => {
   const orderId = parseInt(req.params.id);
 
   try {
@@ -135,7 +136,7 @@ router.get('/:id', authenticate, async (req, res) => {
 
 
 
-router.get('/', authenticate, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const orders = await prisma.order.findMany({
       include: {

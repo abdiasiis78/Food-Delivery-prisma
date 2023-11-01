@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import prisma from "../api/lib/index.js"
 import Jwt from "jsonwebtoken";
 import "dotenv/config"
-import authenticate from '../api/middleware/middleware.js'
+import {authenticate} from '../api/middleware/middleware.js'
 const SECRET_KEY = process.env.SECRET_KEY
 
 const router = express.Router()
@@ -77,7 +77,7 @@ router.post("/login", async (req, res) => {
 
 
    const token = Jwt.sign(
-    {id: isexistingOwner.id , email: isexistingOwner.email },
+    {id: isexistingOwner.id },
     SECRET_KEY,
     {expiresIn: '3h'}
 
@@ -96,8 +96,8 @@ router.post("/login", async (req, res) => {
 })
 
 
-router.put('/:id', authenticate, async (req, res) => {
-    const ownerId = parseInt(req.params.id);
+router.put('/update', authenticate, async (req, res) => {
+    const ownerId = req.owner.id
     const { name, email, username, password } = req.body;
   
     try {
@@ -124,8 +124,8 @@ router.put('/:id', authenticate, async (req, res) => {
   });
 
 
-  router.delete('/:id', authenticate, async (req, res) => {
-    const ownerId =  parseInt(req.params.id);
+  router.delete('/delete', authenticate, async (req, res) => {
+    const ownerId = req.owner.id
   
     try {
       const deleteOwner = await prisma.owner.delete({
@@ -152,8 +152,8 @@ router.put('/:id', authenticate, async (req, res) => {
   
   
   
-  router.get('/:id', async (req, res) => {
-    const ownerId = parseInt(req.params.id);
+  router.get('/curentOwner', authenticate, async (req, res) => {
+    const ownerId = req.owner.id;
 
     try {
       const owner = await prisma.owner.findUnique({
