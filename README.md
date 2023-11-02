@@ -68,7 +68,7 @@ Authenticate an owner and obtain a JWT token.
 
 ### Update Owner Information
 
-**Endpoint:** `PUT /api/owner/:id`
+**Endpoint:** `PUT /api/owner/update`
 
 **Authentication:** Requires a valid JWT token.
 
@@ -94,7 +94,7 @@ Update the information about an existing owner.
 
 ### Delete Owner
 
-**Endpoint:** `DELETE /api/owner/:id`
+**Endpoint:** `DELETE /api/owner/delete`
 
 Delete an owner's account.
 
@@ -107,7 +107,7 @@ Delete an owner's account.
 
 ### Retrieve Owner Information
 
-**Endpoint:** `GET /api/owner/:id`
+**Endpoint:** `GET /api/owner/curentOwner`
 
 Retrieve information about a specific owner.
 
@@ -201,7 +201,7 @@ Authenticate a user and obtain a JWT token.
 
 ### Update User Information
 
-**Endpoint:** `PUT /api/user/:id`
+**Endpoint:** `PUT /api/user/update`
 
 **Authentication:** Requires a valid JWT token.
 
@@ -228,7 +228,7 @@ Update the information of an existing user.
 
 ### Delete User
 
-**Endpoint:** `DELETE /api/user/:id`
+**Endpoint:** `DELETE /api/user/delete`
 
 Delete a user's account.
 
@@ -241,7 +241,7 @@ Delete a user's account.
 
 ### Retrieve User Information
 
-**Endpoint:** `GET /api/user/:id`
+**Endpoint:** `GET /api/user/curentOwner`
 
 Retrieve information about a specific user.
 
@@ -297,7 +297,7 @@ Create a new restaurant.
 | `name`       | string | Yes      | Name of the restaurant                   |
 | `address`    | string | Yes      | Address of the restaurant                |
 | `cuisineType`| string | Yes      | Cuisine type of the restaurant           |
-| `ownerId`    | number | Yes      | ID of the restaurant owner               |
+
 
 ##### Response
 
@@ -323,7 +323,7 @@ Update the information of an existing restaurant.
 | `name`       | string | Yes      | New name of the restaurant (optional)   |
 | `address`    | string | Yes      | New address (optional)                  |
 | `cuisineType`| string | Yes      | New cuisine type (optional)             |
-| `ownerId`    | number | Yes      | New owner ID (optional)                |
+
 
 ##### Response
 
@@ -517,7 +517,7 @@ Create a new order.
 | `totalPrice`     | number    | Yes      | Total price of the order                |
 | `status`         | string    | No       | Order status (default: PROCESSING)      |
 | `menuItemId`     | number    | Yes      | ID of the menu item associated with the order |
-| `userId`         | number    | Yes      | ID of the user who placed the order     |
+
 
 ##### Response
 
@@ -635,7 +635,6 @@ Create a new rating.
 | `text`         | string   | Yes      | Feedback text or comment                |
 | `rating`       | number   | Yes      | Numeric rating value                     |
 | `restaurantId` | number   | Yes      | ID of the restaurant associated with the rating |
-| `userId`       | number   | Yes      | ID of the user who provided the rating   |
 | `menuItemId`   | number   | Yes      | ID of the menu item associated with the rating |
 
 ##### Response
@@ -662,7 +661,6 @@ Update an existing rating.
 | `text`         | string   | Yes      | Updated feedback text or comment        |
 | `rating`       | number   | Yes      | Updated numeric rating value             |
 | `restaurantId` | number   | Yes      | Updated ID of the restaurant associated with the rating |
-| `userId`       | number   | Yes      | Updated ID of the user who provided the rating |
 | `menuItemId`   | number   | Yes      | Updated ID of the menu item associated with the rating |
 
 ##### Response
