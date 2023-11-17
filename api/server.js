@@ -17,4 +17,5 @@ server.use("/api/restaurant", RestaurantRoute)
 server.use("/api/menuItem", FoodRouter)
 server.use("/api/order", OrderRoute)
 server.use("/api/rating", RatingRoute)
+
 export default server;

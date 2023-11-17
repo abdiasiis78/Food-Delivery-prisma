@@ -5,7 +5,7 @@ import {authenticate} from "../api/middleware/middleware.js";
 const router = express();
 
 router.post("/", authenticate, async (req, res) => {
-  const { name, description, price, restaurantId, dietaryInfo } = req.body;
+  const { name, description, price, restaurantId, dietaryInfo, menuImage } = req.body;
 
   try {
     const newMenuItem = await prisma.menuItem.create({
@@ -15,7 +15,7 @@ router.post("/", authenticate, async (req, res) => {
         price: price,
         restaurantId: restaurantId,
         dietaryInfo: dietaryInfo,
-
+        menuImage: menuImage
       },
     });
     return res.status(201).json({
@@ -32,7 +32,7 @@ router.post("/", authenticate, async (req, res) => {
 
 router.put("/:id", authenticate, async (req, res) => {
   const foodId = parseInt(req.params.id);
-  const { name, description, price, restaurantId, dietaryInfo } = req.body;
+  const { name, description, price, restaurantId, dietaryInfo, menuImage} = req.body;
   try {
     const updateMenuItem = await prisma.menuItem.update({
       where: { id: foodId },
@@ -41,7 +41,8 @@ router.put("/:id", authenticate, async (req, res) => {
         description,
         price,
         restaurantId,
-        dietaryInfo
+        dietaryInfo,
+        menuImage
       },
     });
 
