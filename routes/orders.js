@@ -13,7 +13,7 @@ import { OrderStatus } from "@prisma/client";
 const router = express.Router();
 
 router.post("/", userVerify, async (req, res) => {
-  const { orderDate, deliveryAddress, totalPrice, status, menuItemId } = req.body;
+  const { orderDate, deliveryAddress, menuItemId } = req.body;
   const userId = req.user.id;
 
   try {
@@ -21,7 +21,6 @@ router.post("/", userVerify, async (req, res) => {
       data: {
         orderDate,
         deliveryAddress,
-        totalPrice,
         status: OrderStatus.PROCESSING,
         menuItemId,
         userId,
@@ -108,7 +107,7 @@ router.get('/:id', async (req, res) => {
         MenuItem: {
           select:{
             id: true,
-            name: true,
+            title: true,
             description: true,
             price: true,
             dietaryInfo: true
@@ -150,7 +149,7 @@ router.get('/', async (req, res) => {
         MenuItem: {
           select: {
             id: true,
-            name: true,
+            title: true,
             description: true,
             price: true,
             dietaryInfo: true,

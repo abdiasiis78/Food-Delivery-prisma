@@ -1,21 +1,20 @@
 import express from "express";
 import prisma from "../api/lib/index.js";
 import "dotenv/config";
-import {authenticate} from "../api/middleware/middleware.js";
+import { authenticate } from "../api/middleware/middleware.js";
 const router = express();
 
 router.post("/", authenticate, async (req, res) => {
-  const { name, description, price, restaurantId, dietaryInfo, menuImage } = req.body;
+  const { title, description, price, menuImage, dietaryInfo } = req.body;
 
   try {
     const newMenuItem = await prisma.menuItem.create({
       data: {
-        name: name,
+        title: title,
         description: description,
         price: price,
-        restaurantId: restaurantId,
         dietaryInfo: dietaryInfo,
-        menuImage: menuImage
+        menuImage: menuImage,
       },
     });
     return res.status(201).json({
@@ -32,17 +31,16 @@ router.post("/", authenticate, async (req, res) => {
 
 router.put("/:id", authenticate, async (req, res) => {
   const foodId = parseInt(req.params.id);
-  const { name, description, price, restaurantId, dietaryInfo, menuImage} = req.body;
+  const { title, description, price, menuImage, dietaryInfo } = req.body;
   try {
     const updateMenuItem = await prisma.menuItem.update({
       where: { id: foodId },
       data: {
-        name,
+        title,
         description,
         price,
-        restaurantId,
         dietaryInfo,
-        menuImage
+        menuImage,
       },
     });
 
@@ -58,13 +56,11 @@ router.put("/:id", authenticate, async (req, res) => {
   }
 });
 
-
 router.get("/", async (req, res) => {
   try {
     const menuItems = await prisma.menuItem.findMany({
       include: {
-        restaurant: true,
-        rating: true
+       Feedback: true
       },
     });
 
@@ -86,8 +82,7 @@ router.get("/:id", async (req, res) => {
     const menuItem = await prisma.menuItem.findUnique({
       where: { id: menuItemId },
       include: {
-        restaurant: true,
-        rating: true
+        Feedback: true
       },
     });
 

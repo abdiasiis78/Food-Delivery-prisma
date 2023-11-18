@@ -9,67 +9,50 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   name         String
-  username     String   @unique
-  email        String   @unique
+  email        String     @unique
   password     String
   profileImage String?
   orders       Order[]
-  reviews      Rating[]
-  created      DateTime @default(now())
-  updated      DateTime @default(now())
+  Feedback     Feedback[]
+  created      DateTime   @default(now())
+  updated      DateTime   @default(now())
 }
 
 model Owner {
-  id         Int          @id @default(autoincrement())
-  name       String
-  email      String       @unique
-  password   String
-  username   String       @unique
-  Restaurant Restaurant[]
-  created    DateTime     @default(now())
-  updated    DateTime     @default(now())
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String
+  profileImage   String?
+  restaurantName String
+  created        DateTime @default(now())
+  updated        DateTime @default(now())
 }
 
-model Restaurant {
+model MenuItem {
   id          Int        @id @default(autoincrement())
-  name        String
-  address     String
-  cuisineType String?
-  ownerId     Int
-  menu        MenuItem[]
-  Ratings     Rating[]
-  Owner       Owner      @relation(fields: [ownerId], references: [id])
+  title       String
+  description String
+  price       Float
+  menuImage   String
+  dietaryInfo String
+  Order       Order[]
+  Feedback    Feedback[]
   created     DateTime   @default(now())
   updated     DateTime   @default(now())
 }
 
-model MenuItem {
-  id             Int        @id @default(autoincrement())
-  name           String
-  description    String
-  price          Float
-  restaurantId   Int
-  menuImage     String
-  dietaryInfo    String[]
-  Order          Order[]
-  restaurant     Restaurant @relation(fields: [restaurantId], references: [id])
-  created        DateTime   @default(now())
-  updated        DateTime   @default(now())
-  rating         Rating[]
-}
-
 model Order {
-  id              Int      @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   orderDate       DateTime
   deliveryAddress String
-  totalPrice      Float
-  status          OrderStatus  // The status field is connected to the OrderStatus enum
+  status          OrderStatus // The status field is connected to the OrderStatus enum
   menuItemId      Int
   userId          Int
-  User            User     @relation(fields: [userId], references: [id])
-  MenuItem        MenuItem @relation(fields: [menuItemId], references: [id])
+  User            User        @relation(fields: [userId], references: [id])
+  MenuItem        MenuItem    @relation(fields: [menuItemId], references: [id])
 }
 
 enum OrderStatus {
@@ -78,17 +61,14 @@ enum OrderStatus {
   DELIVERED
 }
 
-
-model Rating {
-  id           Int        @id @default(autoincrement())
-  text         String
-  rating       Float
-  restaurantId Int
-  userId       Int
-  menuItemId   Int
-  user         User       @relation(fields: [userId], references: [id])
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
-  MenuItem     MenuItem  @relation(fields: [menuItemId], references: [id])
-  created      DateTime   @default(now())
-  updated      DateTime   @default(now())
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  text       String
+  rating     Float
+  userId     Int
+  menuItemId Int
+  user       User     @relation(fields: [userId], references: [id])
+  MenuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  created    DateTime @default(now())
+  updated    DateTime @default(now())
 }
