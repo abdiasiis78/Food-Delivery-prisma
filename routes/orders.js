@@ -12,6 +12,7 @@ import { OrderStatus } from "@prisma/client";
 
 const router = express.Router();
 
+//  CREATE NEW ORDER - POST
 router.post("/", userVerify, async (req, res) => {
   const { orderDate, deliveryAddress, menuItemId } = req.body;
   const userId = req.user.id;
@@ -90,6 +91,7 @@ router.put('/deliverd/:id', authenticate, async (req, res) => {
 
 
 
+// GET UNIQUE ORDER BY ID - GET
 router.get('/:id', async (req, res) => {
   const orderId = parseInt(req.params.id);
 
@@ -134,7 +136,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
-
+//  GET ALL ORDERS - GET
 router.get('/', async (req, res) => {
   try {
     const orders = await prisma.order.findMany({
@@ -171,7 +173,7 @@ router.get('/', async (req, res) => {
 });
 
 
-
+// DELETE ORDER BY ID - DELETE
 router.delete('/:id', authenticate, async (req, res) => {
   const orderId = parseInt(req.params.id);
 

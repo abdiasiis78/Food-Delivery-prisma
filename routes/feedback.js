@@ -4,6 +4,7 @@ import { userVerify } from "../api/middleware/middleware.js";
 
 const router = express.Router();
 
+// CREATE NEW FEEDBACK - POST 
 router.post("/", userVerify, async (req, res) => {
   const { text, rating, menuItemId } = req.body;
   const userId = req.user.id;
@@ -30,6 +31,8 @@ router.post("/", userVerify, async (req, res) => {
   }
 });
 
+
+// UPDATE EXISTING FEEDBACK - PUT
 router.put("/:id", userVerify, async (req, res) => {
   const feedbackId = parseInt(req.params.id);
   const { text, rating, menuItemId } = req.body;
@@ -59,6 +62,8 @@ router.put("/:id", userVerify, async (req, res) => {
   }
 });
 
+
+// GET UNIQUE FEEDBACK BY ID - GET
 router.get("/:id", async (req, res) => {
   const feedbackId = parseInt(req.params.id);
   try {
@@ -101,6 +106,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//  GET ALL FEEDBACK - GET
 router.get("/", async (req, res) => {
   try {
     const feedbacks = await prisma.feedback.findMany({
@@ -142,7 +148,7 @@ router.get("/", async (req, res) => {
 });
 
 
-// Delete feedback by ID
+// Delete the feedback by ID
 router.delete("/:id", userVerify, async (req, res) => {
   const feedbackId = parseInt(req.params.id);
   const userId = req.user.id;

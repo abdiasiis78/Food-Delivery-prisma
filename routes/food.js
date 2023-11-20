@@ -4,6 +4,7 @@ import "dotenv/config";
 import { authenticate } from "../api/middleware/middleware.js";
 const router = express();
 
+//  CREATE NEW FOODMENU - POST
 router.post("/", authenticate, async (req, res) => {
   const { title, description, price, menuImage, dietaryInfo } = req.body;
 
@@ -29,6 +30,7 @@ router.post("/", authenticate, async (req, res) => {
   }
 });
 
+// UPDATE EXISTING FOODMENU - PUT
 router.put("/:id", authenticate, async (req, res) => {
   const foodId = parseInt(req.params.id);
   const { title, description, price, menuImage, dietaryInfo } = req.body;
@@ -56,6 +58,7 @@ router.put("/:id", authenticate, async (req, res) => {
   }
 });
 
+// GET ALL FOODMENU - GET
 router.get("/", async (req, res) => {
   try {
     const menuItems = await prisma.menuItem.findMany({
@@ -76,6 +79,8 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+//  GET UNIQUE FOODMENU BY ID - GET
 router.get("/:id", async (req, res) => {
   const menuItemId = parseInt(req.params.id);
   try {
@@ -103,6 +108,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+//  DELETE EXISTING FOODMENU BY ID - GET
 router.delete("/:id", authenticate, async (req, res) => {
   const menuItemId = parseInt(req.params.id);
   try {

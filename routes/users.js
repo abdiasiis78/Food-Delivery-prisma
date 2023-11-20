@@ -9,6 +9,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 const router = express.Router();
 
+// create new user -POST
 router.post("/signup", async (req, res) => {
   const { name, email, password, profileImage } = req.body;
   try {
@@ -46,6 +47,8 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+
+// login existing user -POST
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -89,6 +92,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+// update existing user - PUT
 router.put("/update", userVerify, async (req, res) => {
   const userId = req.user.id;
   const { name, email, password, profileImage } = req.body;
@@ -117,34 +122,13 @@ router.put("/update", userVerify, async (req, res) => {
   }
 });
 
-router.delete("/delete", userVerify, async (req, res) => {
-  const userId = req.user.id;
 
-  try {
-    const deleteuser = await prisma.user.delete({
-      where: { id: userId },
-    });
 
-    if (!deleteuser) {
-      return res.status(404).json({
-        message: "user was not found",
-      });
-    }
 
-    return res.status(200).json({
-      message: "user deleted successfully",
-    });
-  } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
-  }
-});
-
+// get current user - GET 
 router.get("/curentUser", userVerify, async (req, res) => {
   const userId = req.user.id;
-
+  
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -174,6 +158,9 @@ router.get("/curentUser", userVerify, async (req, res) => {
   }
 });
 
+
+
+// get all users - GET
 router.get("/", async (req, res) => {
   try {
     const users = await prisma.user.findMany({
@@ -197,4 +184,36 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
+// delete existing user - DELETE
+router.delete("/delete", userVerify, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const deleteuser = await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    if (!deleteuser) {
+      return res.status(404).json({
+        message: "user was not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "user deleted successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: err.message,
+    });
+  }
+});
+
+
+
+
 export default router;
+

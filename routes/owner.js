@@ -1,17 +1,19 @@
+
 import express from "express";
 import bcrypt from "bcrypt";
 import prisma from "../api/lib/index.js";
 import Jwt from "jsonwebtoken";
 import "dotenv/config";
-import { authenticate } from "../api/middleware/middleware.js";
+import { userVerify } from "../api/middleware/middleware.js";
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const router = express.Router();
 
+// create new user -POST
 router.post("/signup", async (req, res) => {
-  const { name, email, password, profileImage, restaurantName } = req.body;
+  const { name, email, password, profileImage } = req.body;
   try {
-    const isexisting = await prisma.owner.findUnique({
+    const isexisting = await prisma.user.findUnique({
       where: {
         email: email,
       },
@@ -19,24 +21,23 @@ router.post("/signup", async (req, res) => {
 
     if (isexisting) {
       return res.status(409).json({
-        message: "owner is alredy exist",
+        message: "user is alredy exist",
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newOwner = await prisma.owner.create({
+    const newuser = await prisma.user.create({
       data: {
-        name: name,
-        email: email,
+        name,
+        email,
         password: hashedPassword,
-        profileImage: profileImage,
-        restaurantName: restaurantName,
+        profileImage,
       },
     });
 
     return res.status(201).json({
-      message: "owner creation successfully",
-      owner: newOwner,
+      message: "user creation successfully",
+      user: newuser,
     });
   } catch (err) {
     return res.status(500).json({
@@ -46,24 +47,26 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+
+// login existing user -POST
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const isexistingOwner = await prisma.owner.findUnique({
+    const isexistinguser = await prisma.user.findUnique({
       where: {
         email,
       },
     });
 
-    if (!isexistingOwner) {
+    if (!isexistinguser) {
       res.status(404).json({
-        message: "owner was not found",
+        message: "user was not found",
       });
     }
 
     const checkPassword = await bcrypt.compare(
       password,
-      isexistingOwner.password
+      isexistinguser.password
     );
 
     if (!checkPassword) {
@@ -72,11 +75,13 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const token = Jwt.sign({ id: isexistingOwner.id }, SECRET_KEY, {
-      expiresIn: "3h",
-    });
+    const token = Jwt.sign(
+      { id: isexistinguser.id, email: isexistinguser.email },
+      SECRET_KEY,
+      { expiresIn: "3h" }
+    );
     return res.status(201).json({
-      message: "owner logedin successfully",
+      message: "user logedin successfully",
       token: token,
     });
   } catch (err) {
@@ -87,25 +92,27 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.put("/update", authenticate, async (req, res) => {
-  const ownerId = req.owner.id;
-  const { name, email, password, profileImage, restaurantName } = req.body;
+
+// update existing user - PUT
+router.put("/update", userVerify, async (req, res) => {
+  const userId = req.user.id;
+  const { name, email, password, profileImage } = req.body;
 
   try {
-    const updatedOwner = await prisma.owner.update({
-      where: { id: ownerId },
+    const updateduser = await prisma.user.update({
+      where: { id: userId },
       data: {
         name,
+
         email,
-        profileImage,
-        restaurantName,
         password: password ? await bcrypt.hash(password, 10) : undefined,
+        profileImage,
       },
     });
 
     return res.status(200).json({
-      message: "Owner information updated successfully",
-      owner: updatedOwner,
+      message: "user information updated successfully",
+      user: updateduser,
     });
   } catch (err) {
     return res.status(500).json({
@@ -115,55 +122,33 @@ router.put("/update", authenticate, async (req, res) => {
   }
 });
 
-router.delete("/delete", authenticate, async (req, res) => {
-  const ownerId = req.owner.id;
 
+
+
+// get current user - GET 
+router.get("/curentUser", userVerify, async (req, res) => {
+  const userId = req.user.id;
+  
   try {
-    const deleteOwner = await prisma.owner.delete({
-      where: { id: ownerId },
-    });
-
-    if (!deleteOwner) {
-      return res.status(404).json({
-        message: "Owner was not found",
-      });
-    }
-
-    return res.status(200).json({
-      message: "Owner deleted successfully",
-    });
-  } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
-  }
-});
-
-router.get("/curentOwner", authenticate, async (req, res) => {
-  const ownerId = req.owner.id;
-
-  try {
-    const owner = await prisma.owner.findUnique({
-      where: { id: ownerId },
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
       select: {
         id: true,
         name: true,
         email: true,
         profileImage: true,
-        restaurantName: true,
       },
     });
 
-    if (!owner) {
+    if (!user) {
       return res.status(404).json({
-        message: "Owner not found",
+        message: "user not found",
       });
     }
 
     return res.status(200).json({
-      message: "Owner information retrieved successfully",
-      owner,
+      message: "user information retrieved successfully",
+      user,
     });
   } catch (err) {
     return res.status(500).json({
@@ -173,21 +158,23 @@ router.get("/curentOwner", authenticate, async (req, res) => {
   }
 });
 
+
+
+// get all users - GET
 router.get("/", async (req, res) => {
   try {
-    const owners = await prisma.owner.findMany({
+    const users = await prisma.user.findMany({
       select: {
         id: true,
         name: true,
         email: true,
         profileImage: true,
-        restaurantName: true,
       },
     });
 
     return res.status(200).json({
-      message: "Owners list retrieved successfully",
-      owners,
+      message: "users list retrieved successfully",
+      users,
     });
   } catch (err) {
     return res.status(500).json({
@@ -197,4 +184,36 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
+// delete existing user - DELETE
+router.delete("/delete", userVerify, async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const deleteuser = await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    if (!deleteuser) {
+      return res.status(404).json({
+        message: "user was not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "user deleted successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: err.message,
+    });
+  }
+});
+
+
+
+
 export default router;
+
