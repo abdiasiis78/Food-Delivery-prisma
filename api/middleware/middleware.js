@@ -4,7 +4,7 @@ import 'dotenv/config';
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-export function authenticate(req, res, next) {
+export function authenticate(req, res, success) {
     const token = req.headers.authorization;
     console.log("TOKEN", token);
   
@@ -34,13 +34,13 @@ export function authenticate(req, res, next) {
         }
 
         req.owner = owner;
-        next();
+        success();
     });
 }
 
 
 
-export function userVerify(req, res, next) {
+export function userVerify(req, res, success) {
     const token = req.headers.authorization;
     console.log("TOKEN", token);
   
@@ -70,6 +70,6 @@ export function userVerify(req, res, next) {
         }
 
         req.user = user;
-        next();
+        success();
     });
 }

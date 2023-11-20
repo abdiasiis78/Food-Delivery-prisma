@@ -1,7 +1,7 @@
 import express from "express";
 import prisma from "../api/lib/index.js";
-import {authenticate} from "../api/middleware/middleware.js";
-import {userVerify} from "../api/middleware/middleware.js";
+import { authenticate } from "../api/middleware/middleware.js";
+import { userVerify } from "../api/middleware/middleware.js";
 import { OrderStatus } from "@prisma/client";
 
 // PROCESSING
@@ -9,11 +9,10 @@ import { OrderStatus } from "@prisma/client";
 // DELIVERED
 // "orderDate": "2023-10-26T09:30:00Z"
 
-
 const router = express.Router();
 
 //  CREATE NEW ORDER - POST
-router.post("/", userVerify, async (req, res) => {
+router.post("/", userVerify, async (req, res, next) => {
   const { orderDate, deliveryAddress, menuItemId } = req.body;
   const userId = req.user.id;
 
@@ -30,20 +29,17 @@ router.post("/", userVerify, async (req, res) => {
 
     return res.status(201).json({
       message: "We are preparing your delicious food.",
-      order: newOrder
+      order: newOrder,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
 // Updating the status from PROCESSING to DELIVERING
-router.put('/delivering/:id', authenticate, async (req, res) => {
+router.put("/delivering/:id", authenticate, async (req, res, next) => {
   const orderId = parseInt(req.params.id);
-  
+
   try {
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
@@ -53,22 +49,18 @@ router.put('/delivering/:id', authenticate, async (req, res) => {
     });
 
     return res.json({
-      message: 'Order is now being delivered.',
+      message: "Order is now being delivered.",
       order: updatedOrder,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: 'Something went wrong while updating the order status',
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // Updating the status from DELIVERING to DELIVERED
-router.put('/deliverd/:id', authenticate, async (req, res) => {
+router.put("/deliverd/:id", authenticate, async (req, res, next) => {
   const orderId = parseInt(req.params.id);
-  
+
   try {
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
@@ -78,21 +70,16 @@ router.put('/deliverd/:id', authenticate, async (req, res) => {
     });
 
     return res.json({
-      message: 'Order has been successfully delivered.',
+      message: "Order has been successfully delivered.",
       order: updatedOrder,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: 'Something went wrong while updating the order status',
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
-
 // GET UNIQUE ORDER BY ID - GET
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   const orderId = parseInt(req.params.id);
 
   try {
@@ -107,37 +94,32 @@ router.get('/:id', async (req, res) => {
           },
         },
         MenuItem: {
-          select:{
+          select: {
             id: true,
             title: true,
             description: true,
             price: true,
-            dietaryInfo: true
-          }
-        }
+            dietaryInfo: true,
+          },
+        },
       },
     });
 
     if (order) {
       return res.json({
-       message: "Order retrieved successfully",
-        order: order
+        message: "Order retrieved successfully",
+        order: order,
       });
-
     } else {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
   } catch (err) {
-    return res.status(500).json({
-      message: 'Something went wrong while retrieving the order',
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 //  GET ALL ORDERS - GET
-router.get('/', async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const orders = await prisma.order.findMany({
       include: {
@@ -161,20 +143,16 @@ router.get('/', async (req, res) => {
     });
 
     return res.json({
-      message: 'Orders retrieved successfully',
+      message: "Orders retrieved successfully",
       orders: orders,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: 'Something went wrong while retrieving orders',
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // DELETE ORDER BY ID - DELETE
-router.delete('/:id', authenticate, async (req, res) => {
+router.delete("/:id", authenticate, async (req, res, next) => {
   const orderId = parseInt(req.params.id);
 
   try {
@@ -183,16 +161,12 @@ router.delete('/:id', authenticate, async (req, res) => {
     });
 
     return res.json({
-      message: 'Order deleted successfully',
+      message: "Order deleted successfully",
       order: deletedOrder,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: 'Something went wrong while deleting the order',
-      error: err.message,
-    });
+    next(err);
   }
 });
-
 
 export default router;

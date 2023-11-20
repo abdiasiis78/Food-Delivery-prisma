@@ -25,4 +25,17 @@ server.use("/api/order", OrderRoute)
 // FEEDBACK ROUTE
 server.use("/api/feedback", RatingRoute)
 
+
+server.use((err , req, res, next )=>{
+    const statusCode = err.statusCode || 500
+    const message = err.message || "internal server error"
+    return res.status(statusCode).json(({
+        success: false,
+        statusCode,
+        message
+    }))
+
+})
+
+
 export default server;

@@ -1,4 +1,3 @@
-
 import express from "express";
 import bcrypt from "bcrypt";
 import prisma from "../api/lib/index.js";
@@ -10,7 +9,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const router = express.Router();
 
 // create new user -POST
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res, next) => {
   const { name, email, password, profileImage } = req.body;
   try {
     const isexisting = await prisma.user.findUnique({
@@ -40,16 +39,12 @@ router.post("/signup", async (req, res) => {
       user: newuser,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // login existing user -POST
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const isexistinguser = await prisma.user.findUnique({
@@ -85,16 +80,12 @@ router.post("/login", async (req, res) => {
       token: token,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // update existing user - PUT
-router.put("/update", userVerify, async (req, res) => {
+router.put("/update", userVerify, async (req, res, next) => {
   const userId = req.user.id;
   const { name, email, password, profileImage } = req.body;
 
@@ -115,20 +106,14 @@ router.put("/update", userVerify, async (req, res) => {
       user: updateduser,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
-
-
-// get current user - GET 
-router.get("/curentUser", userVerify, async (req, res) => {
+// get current user - GET
+router.get("/curentUser", userVerify, async (req, res, next) => {
   const userId = req.user.id;
-  
+
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -151,17 +136,12 @@ router.get("/curentUser", userVerify, async (req, res) => {
       user,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
-
 // get all users - GET
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -177,17 +157,12 @@ router.get("/", async (req, res) => {
       users,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
-
 // delete existing user - DELETE
-router.delete("/delete", userVerify, async (req, res) => {
+router.delete("/delete", userVerify, async (req, res, next) => {
   const userId = req.user.id;
 
   try {
@@ -205,15 +180,8 @@ router.delete("/delete", userVerify, async (req, res) => {
       message: "user deleted successfully",
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
-
-
 export default router;
-

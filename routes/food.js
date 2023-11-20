@@ -2,10 +2,11 @@ import express from "express";
 import prisma from "../api/lib/index.js";
 import "dotenv/config";
 import { authenticate } from "../api/middleware/middleware.js";
+import e from "express";
 const router = express();
 
 //  CREATE NEW FOODMENU - POST
-router.post("/", authenticate, async (req, res) => {
+router.post("/", authenticate, async (req, res, next) => {
   const { title, description, price, menuImage, dietaryInfo } = req.body;
 
   try {
@@ -23,15 +24,12 @@ router.post("/", authenticate, async (req, res) => {
       menuItem: newMenuItem,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err)
   }
 });
 
 // UPDATE EXISTING FOODMENU - PUT
-router.put("/:id", authenticate, async (req, res) => {
+router.put("/:id", authenticate, async (req, res, next) => {
   const foodId = parseInt(req.params.id);
   const { title, description, price, menuImage, dietaryInfo } = req.body;
   try {
@@ -51,15 +49,12 @@ router.put("/:id", authenticate, async (req, res) => {
       menuItem: updateMenuItem,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err)
   }
 });
 
 // GET ALL FOODMENU - GET
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const menuItems = await prisma.menuItem.findMany({
       include: {
@@ -72,16 +67,13 @@ router.get("/", async (req, res) => {
       menuItems,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err)
   }
 });
 
 
 //  GET UNIQUE FOODMENU BY ID - GET
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   const menuItemId = parseInt(req.params.id);
   try {
     const menuItem = await prisma.menuItem.findUnique({
@@ -101,16 +93,13 @@ router.get("/:id", async (req, res) => {
       menuItem: menuItem,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+     next(err)
   }
 });
 
 
 //  DELETE EXISTING FOODMENU BY ID - GET
-router.delete("/:id", authenticate, async (req, res) => {
+router.delete("/:id", authenticate, async (req, res, next) => {
   const menuItemId = parseInt(req.params.id);
   try {
     const delatemenuItem = await prisma.menuItem.delete({
@@ -126,10 +115,7 @@ router.delete("/:id", authenticate, async (req, res) => {
       message: "menuItem deleted successfully",
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err)
   }
 });
 

@@ -4,8 +4,8 @@ import { userVerify } from "../api/middleware/middleware.js";
 
 const router = express.Router();
 
-// CREATE NEW FEEDBACK - POST 
-router.post("/", userVerify, async (req, res) => {
+// CREATE NEW FEEDBACK - POST
+router.post("/", userVerify, async (req, res, next) => {
   const { text, rating, menuItemId } = req.body;
   const userId = req.user.id;
 
@@ -24,16 +24,12 @@ router.post("/", userVerify, async (req, res) => {
       rating: newfeedback,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "somthing went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // UPDATE EXISTING FEEDBACK - PUT
-router.put("/:id", userVerify, async (req, res) => {
+router.put("/:id", userVerify, async (req, res, next) => {
   const feedbackId = parseInt(req.params.id);
   const { text, rating, menuItemId } = req.body;
   const userId = req.user.id;
@@ -55,16 +51,12 @@ router.put("/:id", userVerify, async (req, res) => {
       rating: updateRating,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "somthing went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // GET UNIQUE FEEDBACK BY ID - GET
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   const feedbackId = parseInt(req.params.id);
   try {
     const feedback = await prisma.feedback.findUnique({
@@ -99,15 +91,12 @@ router.get("/:id", async (req, res) => {
       feedback: feedback,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
 //  GET ALL FEEDBACK - GET
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const feedbacks = await prisma.feedback.findMany({
       include: {
@@ -140,21 +129,15 @@ router.get("/", async (req, res) => {
       feedback: feedbacks,
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
 
-
 // Delete the feedback by ID
-router.delete("/:id", userVerify, async (req, res) => {
+router.delete("/:id", userVerify, async (req, res, next) => {
   const feedbackId = parseInt(req.params.id);
-  const userId = req.user.id;
 
   try {
-    
     const existingFeedback = await prisma.feedback.findUnique({
       where: { id: feedbackId },
     });
@@ -162,12 +145,6 @@ router.delete("/:id", userVerify, async (req, res) => {
     if (!existingFeedback) {
       return res.status(404).json({
         message: "Feedback not found",
-      });
-    }
-
-    if (existingFeedback.userId !== userId) {
-      return res.status(403).json({
-        message: "Unauthorized: Feedback does not belong to the authenticated user",
       });
     }
 
@@ -180,12 +157,8 @@ router.delete("/:id", userVerify, async (req, res) => {
       message: "Feedback deleted successfully",
     });
   } catch (err) {
-    return res.status(500).json({
-      message: "Something went wrong",
-      error: err.message,
-    });
+    next(err);
   }
 });
-
 
 export default router;
