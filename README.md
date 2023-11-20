@@ -31,7 +31,7 @@ This section outlines the endpoints related to owner management. These endpoints
 | `name`     | string | Yes      | Name of the owner        |
 | `email`    | string | Yes      | Email of the owner       |
 | `password` | string | Yes      | Password for the owner's account |
-| `username` | string | Yes      | Username of the owner    |
+| `profileImage` | string | Yes      | profileImage of the owner    |
 
 ##### Response
 
@@ -80,7 +80,7 @@ Update the information about an existing owner.
 | ---------- | ------ | -------- | ----------------------------------------- |
 | `name`     | string | No       | New name of the owner (optional)           |
 | `email`    | string | No       | New email address (optional)              |
-| `username` | string | No       | New username (optional)                   |
+| `profileImage` | string | No       | New profileImage (optional)                   |
 | `password` | string | No       | New password (optional)                   |
 
 ##### Response
@@ -161,7 +161,6 @@ Create a new user account.
 | Parameter       | Type   | Required | Description                             |
 | --------------- | ------ | -------- | --------------------------------------- |
 | `name`          | string | Yes      | Name of the user                         |
-| `username`      | string | Yes      | Username of the user                     |
 | `email`         | string | Yes      | Email address of the user               |
 | `password`      | string | Yes      | Password for the user's account         |
 | `profileImage`  | string | No       | URL to the user's profile image (optional) |
@@ -212,7 +211,6 @@ Update the information of an existing user.
 | Parameter      | Type   | Required | Description                               |
 | -------------  | ------ | -------- | ----------------------------------------- |
 | `name`         | string | No       | New name of the user (optional)           |
-| `username`     | string | No       | New username (optional)                   |
 | `email`        | string | No       | New email address (optional)              |
 | `password`     | string | No       | New password (optional)                  |
 | `profileImage` | string | No       | New URL to the user's profile image (optional) |
@@ -278,114 +276,6 @@ This documentation provides an overview of the user management endpoints. For mo
 
 
 
-# Restaurant Management
-
-This section outlines the endpoints related to restaurant management. These endpoints allow you to create, update, retrieve, and delete restaurant information.
-
-### Create a New Restaurant
-
-**Endpoint:** `POST /api/restaurant`
-
-**Authentication:** Requires a valid JWT token.
-
-Create a new restaurant.
-
-##### Request Body
-
-| Parameter     | Type   | Required | Description                             |
-| ------------ | ------ | -------- | --------------------------------------- |
-| `name`       | string | Yes      | Name of the restaurant                   |
-| `address`    | string | Yes      | Address of the restaurant                |
-| `cuisineType`| string | Yes      | Cuisine type of the restaurant           |
-
-
-##### Response
-
-```json
-{
-  "message": "Restaurant created successfully",
-  "restaurant": New Restaurant data
-}
-```
-
-### Update Restaurant Information
-
-**Endpoint:** `PUT /api/restaurant/:id`
-
-**Authentication:** Requires a valid JWT token.
-
-Update the information of an existing restaurant.
-
-##### Request Body
-
-| Parameter     | Type   | Required | Description                            |
-| ------------ | ------ | -------- | --------------------------------------- |
-| `name`       | string | Yes      | New name of the restaurant (optional)   |
-| `address`    | string | Yes      | New address (optional)                  |
-| `cuisineType`| string | Yes      | New cuisine type (optional)             |
-
-
-##### Response
-
-```json
-{
-  "message": "Restaurant information updated successfully",
-  "restaurant": Updated Restaurant data
-}
-```
-
-### List Restaurants
-
-**Endpoint:** `GET /api/restaurant`
-
-Retrieve a list of all restaurants.
-
-**Authentication:** No authentication required.
-
-##### Response
-
-```json
-{
-  "message": "Restaurants information retrieved successfully",
-  "restaurants": [List of Restaurant data]
-}
-```
-
-### Retrieve Restaurant Information
-
-**Endpoint:** `GET /api/restaurant/:id`
-
-Retrieve information about a specific restaurant.
-
-**Authentication:** No authentication required.
-
-##### Response
-
-```json
-{
-  "message": "Restaurant information retrieved successfully",
-  "restaurant": Restaurant data
-}
-```
-
-### Delete Restaurant
-
-**Endpoint:** `DELETE /api/restaurant/:id`
-
-Delete a restaurant.
-
-**Authentication:** Requires a valid JWT token.
-
-##### Response
-
-- `200 OK`: Restaurant deleted successfully
-- `404 Not Found`: Restaurant was not found
-
-This documentation provides an overview of the restaurant management endpoints. For more details on how to use these endpoints and additional features, please refer to the full API documentation.
-
-
-
-
 # Menu Item Management
 
 This section outlines the endpoints related to menu item management. These endpoints allow you to create, update, retrieve, and delete menu item information.
@@ -406,7 +296,8 @@ Create a new menu item.
 | `description`   | string | Yes      | Description of the menu item            |
 | `price`         | number | Yes      | Price of the menu item                  |
 | `restaurantId`  | number | Yes      | ID of the restaurant associated with the menu item |
-| `dietaryInfo`   | string | No       | Dietary information for the menu item (optional) |
+| `dietaryInfo`   | string | YES       | Dietary information for the menu item |
+| `menuImage`   | string |     YES    | menuImage  for the menu item  |
 
 ##### Response
 
@@ -433,7 +324,8 @@ Update the information of an existing menu item.
 | `description`   | string | Yes      | New description (optional)              |
 | `price`         | number | Yes      | New price (optional)                   |
 | `restaurantId`  | number | Yes      | New restaurant ID (optional)           |
-| `dietaryInfo`   | string | No       | New dietary information (optional)     |
+| `dietaryInfo`   | string | YES       | New dietary information (optional)     |
+| `menuImage`   | string |    YES    | New menuImage  (optional)     |
 
 ##### Response
 
@@ -514,7 +406,6 @@ Create a new order.
 | ---------------  | --------- | -------- | --------------------------------------- |
 | `orderDate`      | datetime  | Yes      | Date and time of the order              |
 | `deliveryAddress`| string    | Yes      | Delivery address for the order          |
-| `totalPrice`     | number    | Yes      | Total price of the order                |
 | `status`         | string    | No       | Order status (default: PROCESSING)      |
 | `menuItemId`     | number    | Yes      | ID of the menu item associated with the order |
 
@@ -634,7 +525,6 @@ Create a new rating.
 | -------------- | -------  | -------- | ---------------------------------------- |
 | `text`         | string   | Yes      | Feedback text or comment                |
 | `rating`       | number   | Yes      | Numeric rating value                     |
-| `restaurantId` | number   | Yes      | ID of the restaurant associated with the rating |
 | `menuItemId`   | number   | Yes      | ID of the menu item associated with the rating |
 
 ##### Response
@@ -660,7 +550,6 @@ Update an existing rating.
 | -------------- | -------  | -------- | ---------------------------------------- |
 | `text`         | string   | Yes      | Updated feedback text or comment        |
 | `rating`       | number   | Yes      | Updated numeric rating value             |
-| `restaurantId` | number   | Yes      | Updated ID of the restaurant associated with the rating |
 | `menuItemId`   | number   | Yes      | Updated ID of the menu item associated with the rating |
 
 ##### Response
