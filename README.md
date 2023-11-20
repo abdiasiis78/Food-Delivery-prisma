@@ -5,7 +5,7 @@ Our backend API powers a seamless food ordering and delivery platform. It enable
 
 
 ## Base URL
-## figma UI DESIGN `https://www.figma.com/file/NHaRHu3mOHauuUrEESCq1m/Food-delivery-app?type=design&node-id=0-1&mode=design&t=wxLiqEHxRbHaOZxi-0`
+## figma UI DESIGN `https://www.figma.com/file/NHaRHu3mOHauuUrEESCq1m/Food-delivery-app?type=design&node-id=0%3A1&mode=design&t=wxLiqEHxRbHaOZxi-1`
 
 The base URL for this API is: `https://food-delivery-application-backend.onrender.com`
 
