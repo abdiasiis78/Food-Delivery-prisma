@@ -7,7 +7,7 @@ const router = express();
 
 //  CREATE NEW FOODMENU - POST
 router.post("/", authenticate, async (req, res, next) => {
-  const { title, description, price, menuImage, dietaryInfo } = req.body;
+  const { title, description, price, menuImage, dietaryInfo, category } = req.body;
 
   try {
     const newMenuItem = await prisma.menuItem.create({
@@ -17,6 +17,7 @@ router.post("/", authenticate, async (req, res, next) => {
         price: price,
         dietaryInfo: dietaryInfo,
         menuImage: menuImage,
+        category
       },
     });
     return res.status(201).json({
@@ -31,7 +32,7 @@ router.post("/", authenticate, async (req, res, next) => {
 // UPDATE EXISTING FOODMENU - PUT
 router.put("/:id", authenticate, async (req, res, next) => {
   const foodId = parseInt(req.params.id);
-  const { title, description, price, menuImage, dietaryInfo } = req.body;
+  const { title, description, price, menuImage, dietaryInfo , category} = req.body;
   try {
     const updateMenuItem = await prisma.menuItem.update({
       where: { id: foodId },
@@ -41,6 +42,7 @@ router.put("/:id", authenticate, async (req, res, next) => {
         price,
         dietaryInfo,
         menuImage,
+        category
       },
     });
 

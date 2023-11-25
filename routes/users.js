@@ -100,6 +100,7 @@ router.put("/update", userVerify, async (req, res, next) => {
       },
     });
 
+
     return res.status(200).json({
       message: "user information updated successfully",
       user: updateduser,
@@ -184,3 +185,5 @@ router.delete("/delete", userVerify, async (req, res, next) => {
 });
 
 export default router;
+
+// https://food-delivery-application-backend.onrender.com/api/user/update
