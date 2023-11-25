@@ -38,6 +38,7 @@ model MenuItem {
   price       Float
   menuImage   String
   dietaryInfo String
+  category    String
   Order       Order[]
   Feedback    Feedback[]
   created     DateTime   @default(now())
