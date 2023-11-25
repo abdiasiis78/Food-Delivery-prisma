@@ -48,7 +48,7 @@ router.put("/:id", userVerify, async (req, res, next) => {
 
     return res.status(201).json({
       message: "rating updating successfully",
-      rating: updateRating,
+      rating: updateFeedback,
     });
   } catch (err) {
     next(err);
